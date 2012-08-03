@@ -199,10 +199,9 @@ module Viewpoint
       # @param [Hash] updates a well-formed update hash
       # @example {:set_item_field=>{:field_u_r_i=>{:field_u_r_i=>"message:IsRead"}, :message=>{:is_read=>{:text=>"true"}}}}
       # TODO: This is a stand-in for the Item#update! method until I can firm it up a bit. It is neccessary for the SendMeetingInvitationsOrCancellations attrib
-      def update!(updates)
+      def update!(updates, opts = {:message_disposition => 'SaveOnly', :conflict_resolution => 'AutoResolve', :send_meeting_invitations_or_cancellations => 'SendOnlyToChanged'})
         conn = Viewpoint::EWS::EWS.instance
-        resp = conn.ews.update_item([{:id => @item_id, :change_key => @change_key}], {:updates => updates},
-                                    {:message_disposition => 'SaveOnly', :conflict_resolution => 'AutoResolve', :send_meeting_invitations_or_cancellations => 'SendOnlyToChanged'})
+        resp = conn.ews.update_item([{:id => @item_id, :change_key => @change_key}], {:updates => updates}, opts)
         if resp.status == 'Success'
           @item_id = resp.items.first[resp.items.first.keys.first][:item_id][:id]
           @change_key = resp.items.first[resp.items.first.keys.first][:item_id][:change_key]

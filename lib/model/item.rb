@@ -112,7 +112,7 @@ module Viewpoint
       # Call UpdateItem for this item with the passed updates
       # @param [Hash] updates a well-formed update hash
       # @example {:set_item_field=>{:field_uRI=>{:field_uRI=>"message:IsRead"}, :message=>{:is_read=>{:text=>"true"}}}}
-      def update!(updates)
+      def update!(updates, options = {})
         conn = Viewpoint::EWS::EWS.instance
         resp = conn.ews.update_item([{:id => @item_id, :change_key => @change_key}], {:updates => updates})
         if resp.status == 'Success'
